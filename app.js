@@ -40,7 +40,7 @@ var init=function(){
 	{
     	ctx = canvas.getContext('2d');
     }
-    
+
     $("canvas").mousemove(function(e) {
 		mouse_out = false;
 	    mpos.x = e.pageX - $('canvas').offset().left;
@@ -88,6 +88,9 @@ function draw(){
 			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
 
 			//then draw bezier curve from the bottom of this node to the top of any node which is connected.
+
+			//Here we have the test for mouseover. If the mouse is over and a click is heard, load this unit's settings.
+			
 		}
 	}
 
