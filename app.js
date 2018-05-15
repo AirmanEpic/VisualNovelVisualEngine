@@ -1,25 +1,98 @@
+var clicked_lm=0;
+var mpos={x:0,y:0};
+document.body.addEventListener('mousedown', function(){
+		if (clicked_lm==0)
+		{
+			clicked_lm=1;
+		}
+	}, true); 
+
+	document.body.addEventListener('mouseup', function(){
+		clicked_lm=3
+	}, true); 
 
 var canvas={};
 var ctx={};
-var main=function(){
 
-	var canvas = document.getElementById('canvas');
+var viewpos={x:0,y:0}
+
+var graph=[];
+//each graph entry will need:
+/*
+	- name
+	- type
+	- id (6 digit string)
+	- Output or outputs
+	- height and width? Why not.
+	- x and y
+*/
+//Nodes type list:
+/*
+	0: start node. Unique and can't be created.
+	1: standard node.
+	2: variable node (controls a user defined variable)
+*/
+
+var init=function(){
+
+	canvas = document.getElementById('canvas');
 	if (canvas.getContext) 
 	{
-    	var ctx = canvas.getContext('2d');
+    	ctx = canvas.getContext('2d');
     }
+    
+    $("canvas").mousemove(function(e) {
+		mouse_out = false;
+	    mpos.x = e.pageX - $('canvas').offset().left;
+	   	mpos.y = e.pageY - $('canvas').offset().top;
+	})
 
-	drawscr();
+    //starts the draw event ticking.
+
+    //create special type 0 node (start)
+    graph.push({
+    	type:0,
+    	name:"Start",
+    	id:"_Start",
+    	outputs:[],
+    	height:100,
+    	width:100,
+    	x:0,
+    	y:0
+    })
+	draw();
 }
 
-function drawscr(){
+function draw(){
+	//the equivalent of the draw event. And the step event. Whatever.
 	ctx.clearRect(0, 0, 800, 800)
-	ctx.fillStyle="black"
+	ctx.fillStyle="white"
 	ctx.fillRect(0,0,800,800)
 
-	kd.tick();
+	//ok draw each little box
+	if (graph.length!=0)
+	{
+		for (var i in graph)
+		{
+			//instantiate through graph
+			//we'll want to draw each graph node as a box to start. 
+			//Canvas needs you to specify the draw styles before drawing. Style=color.
+			ctx.strokeStyle="black"
+			//don't get used to this convenience, normally you need to begin path and manually draw each point.
+			ctx.fillRect(graph[i].x-viewpos.x,graph[i].y-viewpos.y,graph[i].height,graph[i].width)
+			ctx.fillStyle="rgb(30,30,30)"
+			//the arguments are identical here to the above.
+			ctx.strokeRect(graph[i].x-viewpos.x,graph[i].y-viewpos.y,graph[i].height,graph[i].width)
 
-	requestAnimationFrame(drawscr);
+			//ok so we now have a box for this node. 
+			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
+
+			//then draw bezier curve from the bottom of this node to the top of any node which is connected.
+		}
+	}
+
+
+	requestAnimationFrame(draw);
 }
 
 
@@ -48,12 +121,11 @@ function resizeDiv() {
 	var vpw = $(window).width();
 	var vph = $(window).height();
 
-
 	var m=detectmob()
 }
 
 
-$(document).ready(main)
+$(document).ready(init)
 $(document).ready(resizeDiv)
 
 function lengthdir(dis, dir)
@@ -64,3 +136,38 @@ function lengthdir(dis, dir)
 	return {x:xp, y:yp}
 }
 
+lerp=function(pos1,pos2,perc)
+{
+	var ret_x=pos1.x+((pos2.x-pos1.x)*perc)
+	var ret_y=pos1.y+((pos2.y-pos1.y)*perc)
+
+	return {x:ret_x,y:ret_y}
+}
+
+lerp_1d=function(pos1,pos2,perc)
+{
+	var ret_x=pos1+((pos2-pos1)*perc)
+
+	return ret_x
+}
+
+function draw_bezier(pos1,pos2,pos3,pos4)
+{
+	if (Math.abs(pos1.x-pos4.x)<curve_standoff*2)
+	{
+		pos2 = lerp(pos1,pos2,.2)
+		pos3 = lerp(pos4,pos3,.2)
+	}
+
+	var bez = new Bezier(pos1,pos2,pos3,pos4)
+
+	ctx.beginPath()
+	var lut = bez.getLUT(20)
+	ctx.moveTo(lut[0].x,lut[0].y)
+	for (var i=0; i<lut.length; i++)
+	{
+		ctx.lineTo(lut[i].x,lut[i].y)
+	}
+	ctx.strokeStyle="black";
+	ctx.stroke();
+}
