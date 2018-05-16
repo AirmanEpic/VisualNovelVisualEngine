@@ -48,7 +48,8 @@ var init=function(){
 	   	mpos.y = e.pageY - $('canvas').offset().top;
 	})
 
-    //starts the draw event ticking.
+   	//hides the preview window until it's needed
+   	$('#preview').animate({width:"0px",opacity:0})
 
     //create special type 0 node (start)
     graph.push({
@@ -64,6 +65,7 @@ var init=function(){
     	y:0
     })
 
+     //starts the draw event ticking.
 	draw();
 }
 
@@ -89,7 +91,7 @@ function draw(){
 			ctx.strokeStyle="rgb(136,102,17)"
 			ctx.lineWidth=1;
 			//the arguments are identical here to the above.
-			ctx.strokeRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].height,graph[i].width)
+			
 
 			//ok so we now have a box for this node. 
 			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
@@ -102,6 +104,7 @@ function draw(){
 			//the rectangle collision function (which I'm using here for simplicity sake) requires two rectangles for arguments, which are composed of x,y, height, and width.
 			if (collision_rect(rect1,rect2))
 			{
+				ctx.strokeStyle="#d9a31b"
 				//the mouse is over.
 				if (clicked_lm==1)
 				{
@@ -111,6 +114,9 @@ function draw(){
 					editing_page = i;
 				}
 			}
+
+
+			ctx.strokeRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].height,graph[i].width)
 		}
 	}
 
