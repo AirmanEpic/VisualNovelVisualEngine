@@ -4,6 +4,74 @@ body {
 	align-items:flex-start;
 }
 
+html {
+	height: 100%;
+}
+
+body {
+	background-color: #110800;
+	text-align: center;
+	height: 100%;
+}
+
+h2 {
+	color: #861;
+	font-family: monospace;
+	font-size: 40px;
+	margin: 4px;
+}
+
+#all{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.area {
+	border: 4px solid #740;
+	background-color: #220800;
+}
+
+.holder {
+	width: 47%;
+	height: 95%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: column;
+}
+
+#timeline {
+	width: 95%;
+	height: 95%;
+	margin: auto;
+}
+
+#settings {
+	width: 95%;
+	height: 25%;
+}
+
+#preview {
+	width: 95%;
+	height: 70%;
+}
+
+#left {
+
+}
+
+#right {
+
+}
+
+#all {
+	margin: auto;
+	margin-top: 3%;
+	width: 95%;
+	height: 95%;
+}
+
 .butt {
     margin: 4px;
     background-color: #220800;
