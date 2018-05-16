@@ -1,7 +1,5 @@
 todo:
 Airman:
-	- click events
-	- load settings function
 	- create new nodes from loaded node at correct position
 	- connect them with a bezier curve
 	- the ability to edit nodes
@@ -16,7 +14,7 @@ Yok:
 	- do image uploading, then the markup for images
 
 Shawb:
-	- create style for buttons.
+	- create style for buttons, text areas
 	- Figure out how to make user variable appear when you click the user variable button (it should appear in the section yok makes)
 	- make something which parses the current state of for example the user variables and creates html lines for the user to edit and click and whatnot.
 	- try and give this behavior. 
