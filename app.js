@@ -65,9 +65,9 @@ var init=function(){
 
 function draw(){
 	//the equivalent of the draw event. And the step event. Whatever.
-	ctx.clearRect(0, 0, 800, 800)
-	ctx.fillStyle="white"
-	ctx.fillRect(0,0,800,800)
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
+	ctx.fillStyle="#220800"
+	ctx.fillRect(0,0,canvas.width, canvas.height)
 
 	//ok draw each little box
 	if (graph.length!=0)
@@ -125,6 +125,12 @@ function resizeDiv() {
 	var vph = $(window).height();
 
 	var m=detectmob()
+
+	var vp_canvarea_w = $('.timelinearea').width() - 8;
+	var vp_canvarea_h = $('.timelinearea').height() - 50;
+
+	canvas.height=vp_canvarea_h;
+	canvas.width = vp_canvarea_w;
 }
 
 
