@@ -56,7 +56,7 @@ h2 {
 #settings {
 	width: 95%;
 	height: 100%;
-    min-width:350px;
+    min-width:670px;
 }
 
 #preview {
@@ -142,4 +142,31 @@ header {
     color: #861;
     margin: 4px;
     font-size: 40px;
+}
+
+.choiceline{
+    display:flex;
+    justify-content: flex-start;
+    align-items:center;
+}
+
+.choiceline p{
+    margin-left:20px;
+}
+
+.choiceline input{
+    width:90px;
+}
+
+input,textarea{
+    background-color:#110800;
+    outline:none;
+    border:1px solid #740;
+    color:#740;
+}
+
+textarea{
+    width:300px;
+    height:100px;
+    resize:none;
 }

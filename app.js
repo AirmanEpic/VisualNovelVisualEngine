@@ -108,7 +108,6 @@ function draw(){
 				//the mouse is over.
 				if (clicked_lm==1)
 				{
-					$("#settings").html("<h2>SETTINGS</h2>")
 					//lm==1 means that the left mouse is clicked. These combined mean that the box has been clicked.
 					load_settings(i);
 					editing_page = i;
@@ -230,6 +229,7 @@ $(document).ready(resizeDiv)
 	}
 
 function load_settings(i){
+	$("#settings").html("<h2>SETTINGS</h2>")
 	//this box is arguably easier to type than graph[i]
 	//it corresponds to the graph entry of the clicked box.
 	this_box=graph[i]
@@ -252,7 +252,7 @@ function load_settings(i){
 		{
 			str += "<div class='choiceline'>"
 			str += "<p>Title:</p><input class='choicetitle' ind="+d+" val="+this_box.choices[d].text+">"
-			str += "<p>Target page:</p><input class='choicetgt' ind="+d+" val="+this_box.choices[d].tgt+">"  
+			str += "<p>Target page:</p><input style='width:40px' class='choicetgt' ind="+d+" val="+this_box.choices[d].tgt+">"  
 			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" val="+this_box.choices[d].cond+">"
 			str += "<div class='butt smallbut delete' ind="+d+"><p>Delete</p></div>"
 			str += "</div>"
@@ -289,6 +289,9 @@ function load_settings(i){
 	    	tgt:new_id,
 	    	cond:""
 	    })
+
+	    //always reload when making changes so they'll appear.
+	    load_settings(i);
 	});
 }
 
