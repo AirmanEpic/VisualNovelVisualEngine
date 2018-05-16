@@ -55,12 +55,15 @@ var init=function(){
     	type:0,
     	name:"Start",
     	id:"_Start",
-    	outputs:[],
+    	choices:[],
+    	text:"What the player sees when they start the game up",
+    	img_content:"",
     	height:100,
     	width:100,
     	x:0,
     	y:0
     })
+
 	draw();
 }
 
@@ -225,14 +228,10 @@ function load_settings(i){
 	this_box=graph[i]
 
 	//populate the settings box based on this graph
-	if (this_box.type==0)
+	//Start box is identical to the standard box, but it won't be able to be moved.
+	if (this_box.type==0 || this_box.type==1)
 	{
-		//start box. No settings?
-	}
-
-	if (this_box.type==1)
-	{
-		//standard box. Load settings from it.
+		//yes. This is how you do HTML in Javascript. I never said it was pretty.
 		str  = "<h3>Settings for "+this_box.name+"</h3>"
 		str += "<h4>Name:</h4>"
 		str += "<input value='"+this_box.name+"'>"
@@ -253,6 +252,7 @@ function load_settings(i){
 		}
 
 		str += "<div class='butt new'><p>New option<p></div>"
+		str += "<div class='butt save'><p>Save page<p></div>"
 
 		$('#settings').append(str)
 	}
