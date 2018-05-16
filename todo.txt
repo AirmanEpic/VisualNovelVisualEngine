@@ -2,11 +2,12 @@ todo:
 Airman:
 	- create new nodes from loaded node at correct position
 	- connect them with a bezier curve
-	- the ability to edit nodes
-	- draw text
+	- the ability to edit nodes (Save button working)
+	- draw text on nodes
 	- ability to move viewport
 	- user variable nodes
 	- conditionals
+	- advanced box spawn mechanics (make them spawn in the right spot)
 	- user can move boxes
 
 Yok:

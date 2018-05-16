@@ -105,6 +105,7 @@ function draw(){
 				//the mouse is over.
 				if (clicked_lm==1)
 				{
+					$("#settings").html("<h2>SETTINGS</h2>")
 					//lm==1 means that the left mouse is clicked. These combined mean that the box has been clicked.
 					load_settings(i);
 					editing_page = i;
@@ -232,14 +233,14 @@ function load_settings(i){
 	if (this_box.type==0 || this_box.type==1)
 	{
 		//yes. This is how you do HTML in Javascript. I never said it was pretty.
-		str  = "<h3>Settings for "+this_box.name+"</h3>"
-		str += "<h4>Name:</h4>"
+		str  = "<h4>Settings for "+this_box.name+"</h4>"
+		str += "<h5>Name:</h5>"
 		str += "<input value='"+this_box.name+"'>"
-		str += "<h4>Page text:</h4>"
+		str += "<h5>Page text:</h5>"
 		str += "<textarea> "+this_box.text+"</textarea>"
-		str += "<h4>Images markdown: </h4>"
+		str += "<h5>Images markdown: </h5>"
 		str += "<textarea> "+this_box.img_content+"</textarea>"
-		str += "<h4>Player's options: </h4>"
+		str += "<h5>Player's options: </h5>"
 
 		for (var d=0; d<this_box.choices.length; d++)
 		{
@@ -277,7 +278,7 @@ function load_settings(i){
 	    	y:this_box.y+250
 	    })
 
-	    graph[i].options.push({
+	    graph[i].choices.push({
 	    	text:"Option text",
 	    	tgt:new_id,
 	    	cond:""
