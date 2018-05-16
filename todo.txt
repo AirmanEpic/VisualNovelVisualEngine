@@ -1,10 +1,10 @@
 todo:
 Airman:
-	- the ability to edit nodes (Save button working)
 	- draw text on nodes
 	- ability to move viewport
+	- delete button for choices on node
 	- user variable nodes
-	- conditionals
+	- conditionals  (once previews are done)
 	- advanced box spawn mechanics (make them spawn in the right spot)
 	- user can move boxes
 

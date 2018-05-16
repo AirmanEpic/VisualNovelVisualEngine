@@ -102,8 +102,8 @@ function draw(){
 			{
 				tgt = find_node_by_tgt(graph[i].choices[ii].tgt)
 				draw_bezier(
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(i*20),y:graph[i].y+graph[i].height},
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(i*20),y:graph[i].y+graph[i].height+200},
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20),y:graph[i].y+graph[i].height},
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20),y:graph[i].y+graph[i].height+200},
 					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y-200},
 					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y}
 					)
@@ -253,18 +253,18 @@ function load_settings(i){
 		//yes. This is how you do HTML in Javascript. I never said it was pretty.
 		str  = "<h4>Settings for "+this_box.name+"</h4>"
 		str += "<h5>Name:</h5>"
-		str += "<input value='"+this_box.name+"'>"
+		str += "<input class='namebox' value='"+this_box.name+"'>"
 		str += "<h5>Page text:</h5>"
-		str += "<textarea> "+this_box.text+"</textarea>"
+		str += "<textarea class='textbox' > "+this_box.text+"</textarea>"
 		str += "<h5>Images markdown: </h5>"
-		str += "<textarea> "+this_box.img_content+"</textarea>"
+		str += "<textarea class='imgbox' > "+this_box.img_content+"</textarea>"
 		str += "<h5>Player's options: </h5>"
 
 		for (var d=0; d<this_box.choices.length; d++)
 		{
 			str += "<div class='choiceline'>"
 			str += "<p>Title:</p><input class='choicetitle' ind="+d+" value="+this_box.choices[d].text+">"
-			str += "<p>Target page:</p><input style='width:40px' class='choicetgt' ind="+d+" value="+this_box.choices[d].tgt+">"  
+			str += "<p>Target page:</p><input style='width:54px' class='choicetgt' ind="+d+" value="+this_box.choices[d].tgt+">"  
 			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" value="+this_box.choices[d].cond+">"
 			str += "<div class='butt smallbut delete' ind="+d+"><p>Delete</p></div>"
 			str += "</div>"
@@ -304,6 +304,30 @@ function load_settings(i){
 
 	    //always reload when making changes so they'll appear.
 	    load_settings(i);
+	});
+
+	$('.save').click(function(event) {
+		newtitle = $('.namebox').val();
+		newtext = $('.textbox').val();
+		newimg = $('.imgbox').val();
+		graph[editing_page].name 		= newtitle;
+		graph[editing_page].text 		= newtext;
+		graph[editing_page].img_content = newimg;
+
+		$('.choicetitle').each(function(){
+			t=parseInt($(this).attr("ind"));
+			graph[editing_page].choices[t].text=$(this).val();
+		})
+
+		$('.choicetgt').each(function(){
+			t=parseInt($(this).attr("ind"));
+			graph[editing_page].choices[t].tgt=$(this).val();
+		})
+
+		$('.choiceconds').each(function(){
+			t=parseInt($(this).attr("ind"));
+			graph[editing_page].choices[t].cond=$(this).val();
+		})
 	});
 }
 
