@@ -7,6 +7,7 @@ Airman:
 	- ability to move viewport
 	- user variable nodes
 	- conditionals
+	- user can move boxes
 
 Yok:
 	- come up with structure of editing window perhaps?

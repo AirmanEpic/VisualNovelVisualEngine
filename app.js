@@ -244,9 +244,9 @@ function load_settings(i){
 		for (var d=0; d<this_box.choices.length; d++)
 		{
 			str += "<div class='choiceline'>"
-			str += "<p>Title:</p><input class='choicetitle' ind="+d+">"
-			str += "<p>Target page:</p><input class='choicetgt' ind="+d+">"  
-			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+">"
+			str += "<p>Title:</p><input class='choicetitle' ind="+d+" val="+this_box.choices[d].text+">"
+			str += "<p>Target page:</p><input class='choicetgt' ind="+d+" val="+this_box.choices[d].tgt+">"  
+			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" val="+this_box.choices[d].cond+">"
 			str += "<div class='butt smallbut delete' ind="+d+"><p>Delete</p></div>"
 			str += "</div>"
 		}
@@ -256,4 +256,41 @@ function load_settings(i){
 
 		$('#settings').append(str)
 	}
+
+	//due to the way JQuery works, new DOM (such a what was just made with .append) erases all click events. We must create new ones.
+	$('.new').click(function(event) {
+		//create a new node and option for this node.
+
+		//new node will have a 6 digit random string.
+		new_id = randstr(6)
+
+		graph.push({
+	    	type:1,
+	    	name:"New Page",
+	    	id:new_id,
+	    	choices:[],
+	    	text:"What the player sees when they start the game up",
+	    	img_content:"",
+	    	height:100,
+	    	width:100,
+	    	x:this_box.x,
+	    	y:this_box.y+250
+	    })
+
+	    graph[i].options.push({
+	    	text:"Option text",
+	    	tgt:new_id,
+	    	cond:""
+	    })
+	});
+}
+
+function randstr(len) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < len; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
 }
