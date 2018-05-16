@@ -127,7 +127,7 @@ function resizeDiv() {
 	var m=detectmob()
 
 	var vp_canvarea_w = $('.timelinearea').width() - 8;
-	var vp_canvarea_h = $('.timelinearea').height() - 50;
+	var vp_canvarea_h = $('.timelinearea').height() - 58;
 
 	canvas.height=vp_canvarea_h;
 	canvas.width = vp_canvarea_w;
