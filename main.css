@@ -1,5 +1,71 @@
-body{
+body {
 	display:flex;
 	justify-content: flex-start;
 	align-items:flex-start;
+}
+
+.butt {
+    margin: 4px;
+    background-color: #220800;
+    border: solid;
+    border-color: #740;
+    text-align: center;
+    text-decoration: none;
+    padding: 0px 10px;
+}
+
+p {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 16px;
+}
+
+h1 {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 45px;
+}
+
+h3 {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 35px;
+}
+
+h4 {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 30px;
+}
+
+h5 {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 25px;
+}
+
+h6 {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 20px;
+}
+
+a {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 16px;
+}
+
+header {
+    font-family: monospace;
+    color: #861;
+    margin: 4px;
+    font-size: 40px;
 }
