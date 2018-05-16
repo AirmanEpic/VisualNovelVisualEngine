@@ -1,5 +1,6 @@
 var clicked_lm=0;
 var mpos={x:0,y:0};
+var curve_standoff=400
 document.body.addEventListener('mousedown', function(){
 		if (clicked_lm==0)
 		{
@@ -90,13 +91,23 @@ function draw(){
 
 			ctx.strokeStyle="rgb(136,102,17)"
 			ctx.lineWidth=1;
-			//the arguments are identical here to the above.
 			
-
 			//ok so we now have a box for this node. 
 			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
 
 			//then draw bezier curve from the bottom of this node to the top of any node which is connected.
+			//draw a bezier for each node.
+			count = graph[i].choices.length;
+			for (var ii=0; ii<graph[i].choices.length; ii++)
+			{
+				tgt = find_node_by_tgt(graph[i].choices[ii].tgt)
+				draw_bezier(
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(i*20),y:graph[i].y+graph[i].height},
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(i*20),y:graph[i].y+graph[i].height+200},
+					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y-200},
+					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y}
+					)
+			}
 
 			//Here we have the test for mouseover. If the mouse is over and a click is heard, load this unit's settings.
 			rect1 = {min_x:graph[i].x,min_y:graph[i].y,w:graph[i].width, h:graph[i].height}
@@ -114,7 +125,7 @@ function draw(){
 				}
 			}
 
-
+			//the arguments are identical here to the above.
 			ctx.strokeRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].height,graph[i].width)
 		}
 	}
@@ -217,7 +228,8 @@ $(document).ready(resizeDiv)
 		{
 			ctx.lineTo(lut[i].x,lut[i].y)
 		}
-		ctx.strokeStyle="black";
+		ctx.strokeStyle="rgb(136,102,17)";
+		ctx.lineWidth=2;
 		ctx.stroke();
 	}
 
@@ -251,9 +263,9 @@ function load_settings(i){
 		for (var d=0; d<this_box.choices.length; d++)
 		{
 			str += "<div class='choiceline'>"
-			str += "<p>Title:</p><input class='choicetitle' ind="+d+" val="+this_box.choices[d].text+">"
-			str += "<p>Target page:</p><input style='width:40px' class='choicetgt' ind="+d+" val="+this_box.choices[d].tgt+">"  
-			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" val="+this_box.choices[d].cond+">"
+			str += "<p>Title:</p><input class='choicetitle' ind="+d+" value="+this_box.choices[d].text+">"
+			str += "<p>Target page:</p><input style='width:40px' class='choicetgt' ind="+d+" value="+this_box.choices[d].tgt+">"  
+			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" value="+this_box.choices[d].cond+">"
 			str += "<div class='butt smallbut delete' ind="+d+"><p>Delete</p></div>"
 			str += "</div>"
 		}
@@ -280,7 +292,7 @@ function load_settings(i){
 	    	img_content:"",
 	    	height:100,
 	    	width:100,
-	    	x:this_box.x,
+	    	x:this_box.x+(150*graph[i].choices.length),
 	    	y:this_box.y+250
 	    })
 
@@ -293,6 +305,18 @@ function load_settings(i){
 	    //always reload when making changes so they'll appear.
 	    load_settings(i);
 	});
+}
+
+function find_node_by_tgt(tgt){
+	ret = -1;
+	for (var i=0; i<graph.length; i++)
+	{
+		if (graph[i].id==tgt)
+		{
+			ret = i
+		}
+	}
+	return ret;
 }
 
 function randstr(len) {

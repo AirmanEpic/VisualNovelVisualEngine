@@ -1,7 +1,5 @@
 todo:
 Airman:
-	- create new nodes from loaded node at correct position
-	- connect them with a bezier curve
 	- the ability to edit nodes (Save button working)
 	- draw text on nodes
 	- ability to move viewport
