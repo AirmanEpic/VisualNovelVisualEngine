@@ -35,6 +35,8 @@ var graph=[];
 	2: variable node (controls a user defined variable)
 */
 
+var dragging={mode:0,offset_x:0,offset_y:0,id:0}
+
 var init=function(){
 
 	canvas = document.getElementById('canvas');
@@ -86,14 +88,12 @@ function draw(){
 			//Canvas needs you to specify the draw styles before drawing. Style=color.
 			ctx.fillStyle="rgb(30,30,30)"
 			//don't get used to this convenience, normally you need to begin path and manually draw each point.
-			ctx.fillRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].height,graph[i].width)
-			
+			ctx.fillRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].width,graph[i].height)
 
 			ctx.strokeStyle="rgb(136,102,17)"
 			ctx.lineWidth=1;
 			
 			//ok so we now have a box for this node. 
-			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
 
 			//then draw bezier curve from the bottom of this node to the top of any node which is connected.
 			//draw a bezier for each node.
@@ -115,18 +115,54 @@ function draw(){
 			//the rectangle collision function (which I'm using here for simplicity sake) requires two rectangles for arguments, which are composed of x,y, height, and width.
 			if (collision_rect(rect1,rect2))
 			{
-				ctx.strokeStyle="#d9a31b"
+				ctx.strokeStyle = "#d9a31b"
 				//the mouse is over.
 				if (clicked_lm==1)
 				{
 					//lm==1 means that the left mouse is clicked. These combined mean that the box has been clicked.
 					load_settings(i);
 					editing_page = i;
+
+					//initiate dragging
+					dragging.mode = 1;
+					dragging.id = i;
+					dragging.offset_x = mpos.x-(graph[i].x-viewpos.x)
+					dragging.offset_y = mpos.y-(graph[i].y-viewpos.y)
+
 				}
 			}
 
+			if (clicked_lm==2)
+				{
+					//dragging action.
+					if (dragging.mode==1 && dragging.id==i)
+					{
+						graph[i].x=mpos.x-dragging.offset_x+viewpos.x
+						graph[i].y=mpos.y-dragging.offset_y+viewpos.y
+					} 
+				}
+
+			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
+			ctx.fillStyle="#861";
+			ctx.textAlign="left"
+			ctx.font="12px Verdana"
+			ctx.fillText(graph[i].name,graph[i].x+3,graph[i].y+12)
+
+			//draw ID
+			ctx.fillStyle="#740"
+			ctx.font="10px Verdana"
+			ctx.textAlign="right"
+			ctx.fillText("id: "+graph[i].id,graph[i].x-3+graph[i].width,graph[i].y+12)
+
+			//draw description
+			ctx.fillStyle="#740"
+			ctx.font="10px Verdana"
+			ctx.textAlign="left"
+			wrapText(ctx,graph[i].text,graph[i].x+7, graph[i].y+25, graph[i].width-10,12)
+
+
 			//the arguments are identical here to the above.
-			ctx.strokeRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].height,graph[i].width)
+			ctx.strokeRect(graph[i].x-viewpos.x+.5,graph[i].y-viewpos.y+.5,graph[i].width,graph[i].height)
 		}
 	}
 
@@ -141,6 +177,7 @@ function draw(){
 	{
 		//3 is the "Up" event and so clicked_lm must be reset to 0.
 		clicked_lm=0
+		dragging.mode=0;
 	}
 
 
@@ -240,6 +277,26 @@ $(document).ready(resizeDiv)
 		return (rect1.min_x < rect2.min_x + rect2.w &&rect1.min_x + rect1.w > rect2.min_x &&rect1.min_y < rect2.min_y + rect2.h && rect1.h + rect1.min_y > rect2.min_y)
 	}
 
+	function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+
+        for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = context.measureText(testLine);
+          var testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+          }
+          else {
+            line = testLine;
+          }
+        }
+        context.fillText(line, x, y);
+      }
+
 function load_settings(i){
 	$("#settings").html("<h2>SETTINGS</h2>")
 	//this box is arguably easier to type than graph[i]
@@ -307,12 +364,15 @@ function load_settings(i){
 	});
 
 	$('.save').click(function(event) {
+		//this gets the data from the form and fills in the graph's data with it.
 		newtitle = $('.namebox').val();
 		newtext = $('.textbox').val();
 		newimg = $('.imgbox').val();
 		graph[editing_page].name 		= newtitle;
 		graph[editing_page].text 		= newtext;
 		graph[editing_page].img_content = newimg;
+
+		graph[editing_page].width = ((newtitle.length+graph[editing_page].id.length)*8)+10
 
 		$('.choicetitle').each(function(){
 			t=parseInt($(this).attr("ind"));
@@ -352,3 +412,4 @@ function randstr(len) {
 
   return text;
 }
+
