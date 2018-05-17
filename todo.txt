@@ -1,9 +1,10 @@
 todo:
 Airman:
-	- delete button for choices on node
 	- user variable nodes
 	- conditionals  (once previews are done)
 	- advanced box spawn mechanics (make them spawn in the right spot)
+	- advanced ID selection stuff (dropdown menu with possible autocomplete options)
+	- restrict self from ID selection.
 
 Yok:
 	- come up with structure of editing window perhaps?

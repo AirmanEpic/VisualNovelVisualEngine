@@ -411,6 +411,14 @@ function load_settings(i){
 			graph[editing_page].choices[t].cond=$(this).val();
 		})
 	});
+
+	$('.delete').click(function(event) {
+		ind = parseInt($(this).attr('ind'))
+
+		this_box.choices.splice(ind,1);
+
+		load_settings(i)
+	});
 }
 
 function find_node_by_tgt(tgt){
