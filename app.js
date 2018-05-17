@@ -132,6 +132,7 @@ function draw(){
 					dragging.offset_x = mpos.x-(graph[i].x-viewpos.x)
 					dragging.offset_y = mpos.y-(graph[i].y-viewpos.y)
 				}
+				//this tells the later codes that a box has indeed been moused over and thus don't initiate viewport drag
 				selected=i;
 			}
 
@@ -354,11 +355,11 @@ $(document).ready(resizeDiv)
 
 function load_settings(i){
 	$("#settings").html("<h2>SETTINGS</h2>")
-	//this box is arguably easier to type than graph[i]
+	//this_box is arguably easier to type than graph[i]
 	//it corresponds to the graph entry of the clicked box.
 	this_box=graph[i]
 
-	//populate the settings box based on this graph
+	//populate the settings box based on this node/page
 	//Start box is identical to the standard box, but it won't be able to be moved.
 	if (this_box.type==0 || this_box.type==1)
 	{
@@ -387,6 +388,7 @@ function load_settings(i){
 		str += "<div class='butt save'><p>Save page<p></div>"
 		str += "<div class='butt prvw' i=" + i + "><p>Preview thy adventure<p></div>"
 
+		//at the end, the string is added to the settings box. I used to just replace the settings html entirely, but that lost the h3. So.
 		$('#settings').append(str)
 	}
 
