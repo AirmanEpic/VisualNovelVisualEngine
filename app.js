@@ -373,6 +373,8 @@ function load_settings(i){
 	    	y:this_box.y+250
 	    })
 
+	    graph[graph.length-1].width = ((graph[graph.length-1].name.length+graph[graph.length-1].id.length)*10)+15
+
 	    graph[i].choices.push({
 	    	text:"Option text",
 	    	tgt:new_id,

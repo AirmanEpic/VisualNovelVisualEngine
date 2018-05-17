@@ -88,6 +88,10 @@ h2 {
     padding: 0px 10px;
 }
 
+h1,h2,h3,h4,h5,p{
+    user-select: none
+}
+
 p {
     font-family: monospace;
     color: #740;
