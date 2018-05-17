@@ -17,6 +17,7 @@ var ctx={};
 
 var viewpos={x:0,y:0}
 var editing_page=0;
+user_vars={"Location":0}
 
 var graph=[];
 //each graph entry will need:
@@ -67,6 +68,33 @@ var init=function(){
     	x:0,
     	y:0
     })
+
+    $('.uservars').click(function(event) {
+    	$("#settings").html("<h2>SETTINGS</h2>")
+    	str  = "<h4>User Variable settings</h4>"
+
+    	count=0
+
+    	//according to stack exchange, this is how you go through data structures with names like this.
+    	for (var property in user_vars) {
+		    if (user_vars.hasOwnProperty(property)) {
+		        // do stuff
+		        str += "<div class='choiceline'>"
+				str += "<p>Title:</p><input class='varname' ind="+property+" value="+property+">"
+				str += "<p>Default Value:</p><input class='vardefval' ind="+property+" value="+user_vars[property]+">"
+				str += "<div class='butt smallbut delete-var' ind="+property+"><p>Delete</p></div>"
+				str += "</div>"
+		    }
+		}
+
+		str += "<div class='butt new-var'><p>New uservar<p></div>"
+
+		$('#settings').append(str)
+
+		//affix HTML events to this.
+		//note: on varname change, delete the old key, create a new key, and give it the value in the value box.
+
+    });
 
      //starts the draw event ticking.
 	draw();
