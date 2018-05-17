@@ -1,7 +1,5 @@
 todo:
 Airman:
-	- draw text on nodes
-	- ability to move viewport
 	- delete button for choices on node
 	- user variable nodes
 	- conditionals  (once previews are done)

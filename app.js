@@ -81,6 +81,9 @@ function draw(){
 	//ok draw each little box
 	if (graph.length!=0)
 	{
+		//This is part of the process of verifying no node that was clicked.
+		var selected=-1;
+
 		for (var i in graph)
 		{
 			//instantiate through graph
@@ -102,15 +105,15 @@ function draw(){
 			{
 				tgt = find_node_by_tgt(graph[i].choices[ii].tgt)
 				draw_bezier(
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20),y:graph[i].y+graph[i].height},
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20),y:graph[i].y+graph[i].height+200},
-					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y-200},
-					{x:graph[tgt].x+(graph[tgt].width/2),y:graph[tgt].y}
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20)-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height},
+					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20)-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height+200},
+					{x:graph[tgt].x+(graph[tgt].width/2)-viewpos.x,y:graph[tgt].y-viewpos.y-200},
+					{x:graph[tgt].x+(graph[tgt].width/2)-viewpos.x,y:graph[tgt].y-viewpos.y}
 					)
 			}
 
 			//Here we have the test for mouseover. If the mouse is over and a click is heard, load this unit's settings.
-			rect1 = {min_x:graph[i].x,min_y:graph[i].y,w:graph[i].width, h:graph[i].height}
+			rect1 = {min_x:graph[i].x-viewpos.x,min_y:graph[i].y-viewpos.y,w:graph[i].width, h:graph[i].height}
 			rect2 = {min_x:mpos.x,min_y:mpos.y,w:1,h:1}
 			//the rectangle collision function (which I'm using here for simplicity sake) requires two rectangles for arguments, which are composed of x,y, height, and width.
 			if (collision_rect(rect1,rect2))
@@ -128,37 +131,37 @@ function draw(){
 					dragging.id = i;
 					dragging.offset_x = mpos.x-(graph[i].x-viewpos.x)
 					dragging.offset_y = mpos.y-(graph[i].y-viewpos.y)
-
 				}
+				selected=i;
 			}
 
 			if (clicked_lm==2)
+			{
+				//dragging action.
+				if (dragging.mode==1 && dragging.id==i)
 				{
-					//dragging action.
-					if (dragging.mode==1 && dragging.id==i)
-					{
-						graph[i].x=mpos.x-dragging.offset_x+viewpos.x
-						graph[i].y=mpos.y-dragging.offset_y+viewpos.y
-					} 
-				}
+					graph[i].x=mpos.x-dragging.offset_x+viewpos.x
+					graph[i].y=mpos.y-dragging.offset_y+viewpos.y
+				} 
+			}
 
 			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
 			ctx.fillStyle="#861";
 			ctx.textAlign="left"
 			ctx.font="12px Verdana"
-			ctx.fillText(graph[i].name,graph[i].x+3,graph[i].y+12)
+			ctx.fillText(graph[i].name,graph[i].x-viewpos.x+3,graph[i].y-viewpos.y+12)
 
 			//draw ID
 			ctx.fillStyle="#740"
 			ctx.font="10px Verdana"
 			ctx.textAlign="right"
-			ctx.fillText("id: "+graph[i].id,graph[i].x-3+graph[i].width,graph[i].y+12)
+			ctx.fillText("id: "+graph[i].id,graph[i].x-viewpos.x-3+graph[i].width,graph[i].y-viewpos.y+12)
 
 			//draw description
 			ctx.fillStyle="#740"
 			ctx.font="10px Verdana"
 			ctx.textAlign="left"
-			wrapText(ctx,graph[i].text,graph[i].x+7, graph[i].y+25, graph[i].width-10,12)
+			wrapText(ctx,graph[i].text,graph[i].x-viewpos.x+7, graph[i].y-viewpos.y+25, graph[i].width-10,12)
 
 
 			//the arguments are identical here to the above.
@@ -171,6 +174,23 @@ function draw(){
 	{
 		//If clicked=1, we need to change that into the hold event. (1 is the mousedown event)
 		clicked_lm=2
+
+		//also, if no graph was moused over (clicked in this event) it means that the user is trying to grab the viewport
+		if (selected==-1)
+		{
+			dragging.mode=2;
+			dragging.offset_x=mpos.x+viewpos.x;
+			dragging.offset_y=mpos.y+viewpos.y;
+		}
+	}
+
+	if (clicked_lm==2)
+	{
+		if (dragging.mode==2)
+		{
+			viewpos.x=dragging.offset_x-mpos.x
+			viewpos.y=dragging.offset_y-mpos.y
+		}
 	}
 
 	if (clicked_lm==3)
@@ -312,9 +332,9 @@ function load_settings(i){
 		str += "<h5>Name:</h5>"
 		str += "<input class='namebox' value='"+this_box.name+"'>"
 		str += "<h5>Page text:</h5>"
-		str += "<textarea class='textbox' > "+this_box.text+"</textarea>"
+		str += "<textarea class='textbox' >"+this_box.text+"</textarea>"
 		str += "<h5>Images markdown: </h5>"
-		str += "<textarea class='imgbox' > "+this_box.img_content+"</textarea>"
+		str += "<textarea class='imgbox' >"+this_box.img_content+"</textarea>"
 		str += "<h5>Player's options: </h5>"
 
 		for (var d=0; d<this_box.choices.length; d++)
@@ -372,7 +392,7 @@ function load_settings(i){
 		graph[editing_page].text 		= newtext;
 		graph[editing_page].img_content = newimg;
 
-		graph[editing_page].width = ((newtitle.length+graph[editing_page].id.length)*8)+10
+		graph[editing_page].width = ((newtitle.length+graph[editing_page].id.length)*10)+15
 
 		$('.choicetitle').each(function(){
 			t=parseInt($(this).attr("ind"));
