@@ -434,6 +434,7 @@ function deploy_preview(i) {
 	var str = "";
 	str += htmlify( "h4", "Beholding " + this_box.name );
 	str += htmlify( "div", htmlify( "p", "Dismiss" ), "class = 'butt deprvw'" );
+	str += htmlify( "canvas", "", "id = 'preview-canvas'" );
 
 	$('#preview').append(str);
 
