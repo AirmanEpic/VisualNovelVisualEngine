@@ -161,7 +161,11 @@ function draw(){
 			ctx.fillStyle="#740"
 			ctx.font="10px Verdana"
 			ctx.textAlign="left"
-			wrapText(ctx,graph[i].text,graph[i].x-viewpos.x+7, graph[i].y-viewpos.y+25, graph[i].width-10,12)
+			//wraptext now returns number of lines
+			h=wrapText(ctx,graph[i].text,graph[i].x-viewpos.x+7, graph[i].y-viewpos.y+25, graph[i].width-10,12)
+
+			//this is the height of the node based on the number of lines, plus some space for the start line.
+			graph[i].height=(h*13)+28
 
 
 			//the arguments are identical here to the above.
@@ -306,7 +310,16 @@ $(document).ready(resizeDiv)
 		//no idea how this works, downloaded it from stackexchange.
 		//it's supposed to make wrap properly on canvas, which is difficult as all hell.
         var words = text.split(' ');
+
+        if (words.length>40)
+        {
+        	words.splice(40,words.length-40)
+
+        	words.push("...")
+        }
+
         var line = '';
+        var h = 0;
 
         for(var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
@@ -316,12 +329,15 @@ $(document).ready(resizeDiv)
             context.fillText(line, x, y);
             line = words[n] + ' ';
             y += lineHeight;
+            h+=1;
           }
           else {
             line = testLine;
           }
         }
         context.fillText(line, x, y);
+
+        return h;
       }
 
 function load_settings(i){
