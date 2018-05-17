@@ -188,6 +188,7 @@ function draw(){
 	{
 		if (dragging.mode==2)
 		{
+			//viewport dragging is happening
 			viewpos.x=dragging.offset_x-mpos.x
 			viewpos.y=dragging.offset_y-mpos.y
 		}
@@ -228,11 +229,13 @@ resizeDiv();
 
 
 function resizeDiv() {
+	//what happens when the screen is resized.
 	var vpw = $(window).width();
 	var vph = $(window).height();
 
 	var m=detectmob()
 
+	//figuring out how big the canvas area should be.
 	var vp_canvarea_w = $('.timelinearea').width() - 8;
 	var vp_canvarea_h = $('.timelinearea').height() - 58;
 
@@ -270,6 +273,8 @@ $(document).ready(resizeDiv)
 
 	function draw_bezier(pos1,pos2,pos3,pos4)
 	{
+		//draws a bezier curve. Notice how it has 4 points? Bezier curves have 4 points.
+		//	the middle two should be the points that kinda help define the curve. Just play around with the middle arguments, you'll see.
 		if (Math.abs(pos1.x-pos4.x)<curve_standoff*2)
 		{
 			pos2 = lerp(pos1,pos2,.2)
@@ -298,6 +303,8 @@ $(document).ready(resizeDiv)
 	}
 
 	function wrapText(context, text, x, y, maxWidth, lineHeight) {
+		//no idea how this works, downloaded it from stackexchange.
+		//it's supposed to make wrap properly on canvas, which is difficult as all hell.
         var words = text.split(' ');
         var line = '';
 
@@ -327,6 +334,7 @@ function load_settings(i){
 	//Start box is identical to the standard box, but it won't be able to be moved.
 	if (this_box.type==0 || this_box.type==1)
 	{
+		//if it's a type=2 node, this will be a "user variable" node and the html string will be different.
 		//yes. This is how you do HTML in Javascript. I never said it was pretty.
 		str  = "<h4>Settings for "+this_box.name+"</h4>"
 		str += "<h5>Name:</h5>"
@@ -360,6 +368,8 @@ function load_settings(i){
 		//new node will have a 6 digit random string.
 		new_id = randstr(6)
 
+		//This is where the new node (which is attached to the just created option) is created. 
+		//this is the data structure of nodes, pay attention!
 		graph.push({
 	    	type:1,
 	    	name:"New Page",
@@ -373,8 +383,10 @@ function load_settings(i){
 	    	y:this_box.y+250
 	    })
 
+	    //re-size the node to fit the text on the top line.
 	    graph[graph.length-1].width = ((graph[graph.length-1].name.length+graph[graph.length-1].id.length)*10)+15
 
+	    //create a "choice" for the parent node
 	    graph[i].choices.push({
 	    	text:"Option text",
 	    	tgt:new_id,
@@ -394,8 +406,11 @@ function load_settings(i){
 		graph[editing_page].text 		= newtext;
 		graph[editing_page].img_content = newimg;
 
+		//resize the node based on the text on the top line.
 		graph[editing_page].width = ((newtitle.length+graph[editing_page].id.length)*10)+15
 
+
+		//these things get all the data from the forms and saves it to the correct node (editing_page)
 		$('.choicetitle').each(function(){
 			t=parseInt($(this).attr("ind"));
 			graph[editing_page].choices[t].text=$(this).val();
@@ -422,6 +437,10 @@ function load_settings(i){
 }
 
 function find_node_by_tgt(tgt){
+	//very important. This function returns the index in graph of the node with the given ID.
+	//this will allow you to search for a node by the ID. 
+	//WHY? Well the thing is indexes change when things are created or deleted, and you don't want to have to re-target every node based on that,
+	//	so it's simpler to just have everything tied to ID and search it out every time.
 	ret = -1;
 	for (var i=0; i<graph.length; i++)
 	{
