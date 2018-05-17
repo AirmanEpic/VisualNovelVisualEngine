@@ -17,7 +17,7 @@ var ctx={};
 
 var viewpos={x:0,y:0}
 var editing_page=0;
-user_vars={"Location":0}
+default_user_vars={"Location":0}
 
 var graph=[];
 //each graph entry will need:
@@ -70,30 +70,7 @@ var init=function(){
     })
 
     $('.uservars').click(function(event) {
-    	$("#settings").html("<h2>SETTINGS</h2>")
-    	str  = "<h4>User Variable settings</h4>"
-
-    	count=0
-
-    	//according to stack exchange, this is how you go through data structures with names like this.
-    	for (var property in user_vars) {
-		    if (user_vars.hasOwnProperty(property)) {
-		        // do stuff
-		        str += "<div class='choiceline'>"
-				str += "<p>Title:</p><input class='varname' ind="+property+" value="+property+">"
-				str += "<p>Default Value:</p><input class='vardefval' ind="+property+" value="+user_vars[property]+">"
-				str += "<div class='butt smallbut delete-var' ind="+property+"><p>Delete</p></div>"
-				str += "</div>"
-		    }
-		}
-
-		str += "<div class='butt new-var'><p>New uservar<p></div>"
-
-		$('#settings').append(str)
-
-		//affix HTML events to this.
-		//note: on varname change, delete the old key, create a new key, and give it the value in the value box.
-
+    	load_uservars();
     });
 
      //starts the draw event ticking.
@@ -132,9 +109,15 @@ function draw(){
 			for (var ii=0; ii<graph[i].choices.length; ii++)
 			{
 				tgt = find_node_by_tgt(graph[i].choices[ii].tgt)
+
+				//this is just the horizontal position that I want the bezier curve to come out of. Saves time to store it as a variable.
+				posn=(graph[i].width/2)
+				//posn-=20
+				posn+=(40*((ii-((graph[i].choices.length-1)/2))/(graph[i].choices.length)));
+
 				draw_bezier(
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20)-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height},
-					{x:graph[i].x+(graph[i].width/2)-((count-1)*10)+(ii*20)-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height+200},
+					{x:graph[i].x+posn-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height},
+					{x:graph[i].x+posn-viewpos.x,y:graph[i].y-viewpos.y+graph[i].height+200},
 					{x:graph[tgt].x+(graph[tgt].width/2)-viewpos.x,y:graph[tgt].y-viewpos.y-200},
 					{x:graph[tgt].x+(graph[tgt].width/2)-viewpos.x,y:graph[tgt].y-viewpos.y}
 					)
@@ -542,6 +525,73 @@ function find_node_by_tgt(tgt){
 		}
 	}
 	return ret;
+}
+
+function load_uservars(){
+	$("#settings").html("<h2>SETTINGS</h2>")
+	str  = "<h4>User Variable settings</h4>"
+
+	count=0
+
+	//according to stack exchange, this is how you go through data structures with names like this.
+	for (var property in default_user_vars) {
+	    if (default_user_vars.hasOwnProperty(property)) {
+	        // do stuff
+	        str += "<div class='choiceline'>"
+			str += "<p>Title:</p><input class='varname' ind="+property+" value="+property+">"
+			str += "<p>Default Value:</p><input class='vardefval' ind="+property+" value="+default_user_vars[property]+">"
+			str += "<div class='butt smallbut delete-var' ind="+property+"><p>Delete</p></div>"
+			str += "</div>"
+	    }
+	}
+
+	str += "<div class='butt new-var'><p>New uservar<p></div>"
+	str += "<div class='butt save-var'><p>Save changes<p></div>"
+
+	$('#settings').append(str)
+
+	//affix HTML events to this.
+	//note: on varname change, delete the old key, create a new key, and give it the value in the value box.
+	$('.varname').change(function(event) {
+		todel = $(this).attr("ind")
+		oldval = default_user_vars[todel];
+
+		delete default_user_vars[todel]
+
+		newname = $(this).val();
+		default_user_vars[newname]=oldval;
+
+		load_uservars();
+	});
+
+	$('.new-var').click(function(event) {
+		var newname = "user_variable"+Object.keys(default_user_vars).length
+		default_user_vars[newname]=0;
+
+		load_uservars();
+	});
+
+	$('.delete-var').click(function(event) {
+		t = $(this).attr("ind")
+
+		delete default_user_vars[t]
+
+		load_uservars();
+	});
+
+	$('.save-var').click(function(event) {
+
+		$('.vardefval').each(function(index, el) {
+			t = $(el).attr('ind')
+			v = $(el).val()
+			default_user_vars[t]=v
+
+			//console.log("set")
+			console.log("setting "+t+" to "+v)
+
+			load_uservars();
+		});
+	});
 }
 
 function randstr(len) {
