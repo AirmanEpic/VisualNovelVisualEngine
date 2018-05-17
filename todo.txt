@@ -1,5 +1,6 @@
 todo:
 Airman:
+	- make curves come out of actual object
 	- user variable nodes
 	- conditionals  (once previews are done)
 	- advanced box spawn mechanics (make them spawn in the right spot)

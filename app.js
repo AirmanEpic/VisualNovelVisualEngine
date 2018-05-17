@@ -245,6 +245,18 @@ function resizeDiv() {
 
 	canvas.height= vp_canvarea_h;
 	canvas.width = vp_canvarea_w;
+
+	//figure out how big the settings box should be based on the canvas and make this the MINIMUM size.
+	//THIS DID NOT WORK. Using conditionals instead.
+	if (graph[editing_page].choices.length<4)
+	{
+		min_h = $('#timeline').height()
+		$('#settings').css({"min-height":(min_h+"px")})
+	}
+	else
+	{
+		$('#settings').css({"min-height":"auto"})
+	}
 }
 
 
@@ -409,6 +421,18 @@ function load_settings(i){
 	    	tgt:new_id,
 	    	cond:""
 	    })
+
+	    //figure out how big the settings box should be based on the canvas and make this the MINIMUM size.
+		//THIS DID NOT WORK. Using conditionals instead.
+		if (graph[editing_page].choices.length<4)
+		{
+			min_h = $('#timeline').height()
+			$('#settings').css({"min-height":(min_h+"px")})
+		}
+		else
+		{
+			$('#settings').css({"min-height":"auto"})
+		}
 
 	    //always reload when making changes so they'll appear.
 	    load_settings(i);
