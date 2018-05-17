@@ -6,11 +6,11 @@ document.body.addEventListener('mousedown', function(){
 		{
 			clicked_lm=1;
 		}
-	}, true); 
+	}, true);
 
 	document.body.addEventListener('mouseup', function(){
 		clicked_lm=3
-	}, true); 
+	}, true);
 
 var canvas={};
 var ctx={};
@@ -40,7 +40,7 @@ var dragging={mode:0,offset_x:0,offset_y:0,id:0}
 var init=function(){
 
 	canvas = document.getElementById('canvas');
-	if (canvas.getContext) 
+	if (canvas.getContext)
 	{
     	ctx = canvas.getContext('2d');
     }
@@ -87,7 +87,7 @@ function draw(){
 		for (var i in graph)
 		{
 			//instantiate through graph
-			//we'll want to draw each graph node as a box to start. 
+			//we'll want to draw each graph node as a box to start.
 			//Canvas needs you to specify the draw styles before drawing. Style=color.
 			ctx.fillStyle="rgb(30,30,30)"
 			//don't get used to this convenience, normally you need to begin path and manually draw each point.
@@ -95,8 +95,8 @@ function draw(){
 
 			ctx.strokeStyle="rgb(136,102,17)"
 			ctx.lineWidth=1;
-			
-			//ok so we now have a box for this node. 
+
+			//ok so we now have a box for this node.
 
 			//then draw bezier curve from the bottom of this node to the top of any node which is connected.
 			//draw a bezier for each node.
@@ -142,7 +142,7 @@ function draw(){
 				{
 					graph[i].x=mpos.x-dragging.offset_x+viewpos.x
 					graph[i].y=mpos.y-dragging.offset_y+viewpos.y
-				} 
+				}
 			}
 
 			//next up we'll need to draw the name and ID on the top, and a small-texted version of the description below.
@@ -207,7 +207,7 @@ function draw(){
 
 
 
-function detectmob() { 
+function detectmob() {
  if( navigator.userAgent.match(/Android/i)
  || navigator.userAgent.match(/webOS/i)
  || navigator.userAgent.match(/iPhone/i)
@@ -247,7 +247,7 @@ $(document).ready(resizeDiv)
 //support functions
 	function lengthdir(dis, dir)
 	{
-		var xp=Math.cos(dtr(-dir)) * dis 
+		var xp=Math.cos(dtr(-dir)) * dis
 		var yp=Math.sin(dtr(-dir)) * dis
 
 		return {x:xp, y:yp}
@@ -341,7 +341,7 @@ function load_settings(i){
 		{
 			str += "<div class='choiceline'>"
 			str += "<p>Title:</p><input class='choicetitle' ind="+d+" value="+this_box.choices[d].text+">"
-			str += "<p>Target page:</p><input style='width:54px' class='choicetgt' ind="+d+" value="+this_box.choices[d].tgt+">"  
+			str += "<p>Target page:</p><input style='width:54px' class='choicetgt' ind="+d+" value="+this_box.choices[d].tgt+">"
 			str += "<p>Conditionals:</p><input class='choiceconds' ind="+d+" value="+this_box.choices[d].cond+">"
 			str += "<div class='butt smallbut delete' ind="+d+"><p>Delete</p></div>"
 			str += "</div>"
@@ -349,6 +349,7 @@ function load_settings(i){
 
 		str += "<div class='butt new'><p>New option<p></div>"
 		str += "<div class='butt save'><p>Save page<p></div>"
+		str += "<div class='butt prvw' i=" + i + "><p>Preview thy adventure<p></div>"
 
 		$('#settings').append(str)
 	}
@@ -419,6 +420,26 @@ function load_settings(i){
 
 		load_settings(i)
 	});
+
+	$(".prvw").click(function(event) {
+		$('#preview').animate({width:"95%",opacity:1});
+		deploy_preview($(this).attr("i"));
+	});
+}
+
+function deploy_preview(i) {
+	$("#preview").html(htmlify( "h2", "YE PREVIEW" ));
+	this_box=graph[i];
+
+	var str = "";
+	str += htmlify( "h4", "Beholding " + this_box.name );
+	str += htmlify( "div", htmlify( "p", "Dismiss" ), "class = 'butt deprvw'" );
+
+	$('#preview').append(str);
+
+	$(".deprvw").click(function(event) {
+		$('#preview').animate({width:"0px",opacity:0});
+	});
 }
 
 function find_node_by_tgt(tgt){
@@ -443,3 +464,9 @@ function randstr(len) {
   return text;
 }
 
+function htmlify( tag, contents, attributes ) {
+	if (typeof contents   == "undefined") {contents   = ""};
+	if (typeof attributes == "undefined") {attributes = ""};
+	var output = "<" + tag + " " + attributes + ">" + contents + "</" + tag + ">";
+	return output;
+}

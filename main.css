@@ -15,7 +15,7 @@ body {
 }
 
 h2 {
-	color: #861;
+	color: #971;
 	font-family: monospace;
 	font-size: 40px;
 	margin: 4px;
@@ -79,13 +79,16 @@ h2 {
 }
 
 .butt {
-    margin: 4px;
+    margin: auto;
+		margin-top: 4px;
+		margin-bottom: 4px;
     background-color: #220800;
     border: solid;
     border-color: #740;
     text-align: center;
     text-decoration: none;
     padding: 0px 10px;
+		width: 50%;
 }
 
 h1,h2,h3,h4,h5,p{
